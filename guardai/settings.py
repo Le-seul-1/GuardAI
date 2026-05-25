@@ -182,3 +182,6 @@ os.makedirs(LOGS_DIR, exist_ok=True)
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-66a13.up.railway.app']
