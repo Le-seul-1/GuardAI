@@ -29,7 +29,9 @@ DEBUG = config('DEBUG', default='True') == 'True'
 
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
+
+ALLOWED_HOSTS = ['web-production-66a13.up.railway.app', 'localhost', '127.0.0.1']
 
 # Application definition
 
