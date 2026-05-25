@@ -31,7 +31,7 @@ DEBUG = config('DEBUG', default='True') == 'True'
 
 # ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = ['web-production-66a13.up.railway.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['guardai.up.railway.app', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -145,9 +145,9 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# IBM Bob AI Configuration
-IBM_BOB_API_KEY = config('IBM_BOB_API_KEY', default='')
-IBM_BOB_API_URL = config('IBM_BOB_API_URL', default='https://api.ibm-bob.com/v1')
+# # IBM Bob AI Configuration
+# IBM_BOB_API_KEY = config('IBM_BOB_API_KEY', default='')
+# IBM_BOB_API_URL = config('IBM_BOB_API_URL', default='https://api.ibm-bob.com/v1')
 
 # Session configuration
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
