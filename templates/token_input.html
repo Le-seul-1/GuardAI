@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}GitHub Connection - GuardAI{% endblock %}
+
+{% block content %}
+<div class="container flex justify-center" style="margin-top: 60px;">
+    <div style="max-width: 500px; width: 100%;">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-gradient-accent mb-2" style="font-size: 2.5rem;">Connect to GitHub</h1>
+            <p class="text-muted">Enter your personal access token to start analyzing your repositories securely.</p>
+        </div>
+
+        <div class="card">
+            <form method="POST" action="{% url 'github_auth:save_token' %}" id="tokenForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="token" class="form-label flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        Personal Access Token
+                    </label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="token" 
+                        name="token" 
+                        placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1.05rem;">
+                    Authenticate & Continue
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </form>
+        </div>
+
+        <div class="mt-8 text-center text-muted" style="font-size: 0.9rem;">
+            <p class="mb-2">Need a token? <a href="https://github.com/settings/tokens/new" target="_blank" style="color: var(--accent-light); text-decoration: none;">Generate one here</a>.</p>
+            <p>Make sure to check the <strong>repo</strong> and <strong>user</strong> scopes.</p>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

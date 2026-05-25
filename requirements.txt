@@ -1,0 +1,29 @@
+# Core Django
+Django==4.2.7
+
+# HTTP Requests
+requests==2.31.0
+
+# Environment Variables
+python-decouple==3.8
+
+# GitHub OAuth (Optional)
+django-allauth==0.57.0
+
+# Groq AI
+groq==0.4.0
+
+# Production Server
+gunicorn==21.2.0
+
+# PostgreSQL Database (Production)
+psycopg2-binary==2.9.9
+
+# Testing & Coverage
+coverage==7.3.2
+
+# Security
+django-cors-headers==4.3.1
+
+# Utilities
+python-dateutil==2.8.2

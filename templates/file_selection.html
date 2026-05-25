@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}File Selection - {{ repo.name }} - GuardAI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Repository Info -->
+    <div class="card mb-6" style="border-top: 2px solid var(--accent);">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-dim"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                {{ repo.name }}
+            </h2>
+            <a href="{{ repo.url }}" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 4px 10px;">
+                View on GitHub
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+        </div>
+        <p class="text-muted mb-4">{{ repo.description|default:"No description" }}</p>
+        <div class="flex gap-4">
+            <span class="badge" style="background: var(--bg-surface-active);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>{{ repo.language|default:"Unknown" }}</span>
+            <span class="badge" style="background: var(--bg-surface-active);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>{{ repo.default_branch }}</span>
+            <span class="badge" style="background: var(--bg-surface-active);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>{{ total_files }} files</span>
+        </div>
+    </div>
+
+    <!-- File List -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 24px; border-bottom: 1px solid var(--border);">
+            <h3 class="flex items-center gap-2 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Repository Files
+            </h3>
+            <p class="text-dim" style="font-size: 0.9rem;">
+                Our smart selection algorithm will automatically pick the 3 most critical files for security analysis.
+            </p>
+        </div>
+        
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70%;">File Path</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr>
+                        <td><code>{{ file.path }}</code></td>
+                        <td class="text-dim font-mono">
+                            {% if file.size < 1024 %}
+                                {{ file.size }} B
+                            {% elif file.size < 1048576 %}
+                                {% widthratio file.size 1024 1 %} KB
+                            {% else %}
+                                {% widthratio file.size 1048576 1 %} MB
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" style="padding: 40px; text-align: center; color: var(--primary-muted);">
+                            No files found in this repository
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="padding: 24px; border-top: 1px solid var(--border); background: var(--bg-base);">
+            {% if selected_files %}
+            <!-- Auto-Selected Files Section -->
+            <div class="alert alert-success mb-6 flex-col items-start gap-4" style="background: rgba(16, 185, 129, 0.05);">
+                <div class="flex items-center gap-2" style="color: var(--success); font-weight: 600;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Auto-Selected Files ({{ selected_files|length }}/3)
+                </div>
+                
+                <div style="width: 100%;">
+                    <p class="text-dim mb-3" style="font-size: 0.9rem;">The algorithm identified these files as highly critical:</p>
+                    <div class="grid" style="grid-template-columns: 1fr; gap: 8px;">
+                        {% for file in selected_files %}
+                        <div class="flex justify-between items-center" style="background: var(--bg-surface); border: 1px solid var(--border); padding: 12px 16px; border-radius: var(--radius-md);">
+                            <code>{{ file.path }}</code>
+                            <span class="badge font-mono" style="background: transparent; color: var(--primary-muted); border-color: var(--border-hover);">Score: {{ file.priority_score }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post" action="{% url 'analyzer:analyze_files' %}">
+                {% csrf_token %}
+                <div class="flex flex-col items-center gap-2">
+                    <button type="submit" class="btn btn-accent" style="padding: 12px 32px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run Groq AI Analysis
+                    </button>
+                    <p class="text-dim font-mono" style="font-size: 0.8rem;">This may take a minute...</p>
+                </div>
+            </form>
+            {% elif files %}
+            <div class="flex flex-col items-center gap-2">
+                <a href="{% url 'analyzer:file_selection' repo.owner repo.name %}" class="btn btn-primary" style="padding: 12px 32px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Select Critical Files
+                </a>
+                <p class="text-dim font-mono" style="font-size: 0.8rem;">We will automatically select 3 files to analyze</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

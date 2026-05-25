@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Erreur Serveur - GuardAI{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 80px;">
+    <div class="card" style="border: 2px solid var(--danger); background: var(--bg-card);">
+        <div style="padding: 40px; text-align: center;">
+            <!-- Icon -->
+            <div style="margin-bottom: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            
+            <!-- Large 500 Number -->
+            <div style="font-size: 80px; font-weight: 700; color: var(--danger); margin-bottom: 16px;">
+                500
+            </div>
+            
+            <h1 style="color: var(--danger); margin-bottom: 16px; font-size: 2rem;">
+                Erreur Serveur Interne
+            </h1>
+            
+            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Une erreur inattendue s'est produite sur nos serveurs. Nos équipes ont été automatiquement notifiées et travaillent à résoudre le problème.
+            </p>
+            
+            <div style="display: inline-block; padding: 8px 16px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; margin-bottom: 32px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                <code style="color: var(--danger); font-size: 0.9rem;">Code: INTERNAL_SERVER_ERROR</code>
+            </div>
+            
+            <div style="display: flex; gap: 16px; justify-content: center;">
+                <a href="javascript:history.back()" class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Retour
+                </a>
+                <a href="{% url 'analyzer:home' %}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

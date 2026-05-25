@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Add File - GuardAI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-8">
+        <h1 class="flex items-center gap-3 mb-2" style="font-size: 2rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-dim"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            {{ session.repository_owner }}/{{ session.repository_name }}
+        </h1>
+        <div class="flex items-center gap-4 text-muted">
+            <span class="font-mono">Analyzed files: {{ analyzed_count }}/5</span>
+            <span class="badge badge-success flex items-center gap-1 font-mono">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                {{ remaining_slots }} slot(s) available
+            </span>
+        </div>
+        <div style="background: var(--bg-surface-active); border-radius: var(--radius-sm); height: 6px; width: 300px; margin-top: 16px; overflow: hidden;">
+            <div style="background: var(--success); height: 100%; width: {% widthratio analyzed_count 1 20 %}%;"></div>
+        </div>
+    </div>
+
+    <!-- File Selection Form -->
+    <div class="card mb-8" style="padding: 0; overflow: hidden; border-top: 2px solid var(--accent);">
+        <div style="padding: 24px; border-bottom: 1px solid var(--border); background: var(--bg-surface-active);">
+            <h3 class="flex items-center gap-2 m-0" style="font-size: 1.2rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                Select a File to Analyze
+            </h3>
+        </div>
+        
+        {% if available_files %}
+        <!-- Search Box -->
+        <div style="padding: 24px; border-bottom: 1px solid var(--border);">
+            <div class="form-group" style="margin: 0; position: relative;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 14px; top: 12px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="fileSearch" class="form-control" placeholder="Search file path..." onkeyup="filterFiles()" style="padding-left: 40px; font-family: var(--font-mono);">
+            </div>
+        </div>
+
+        <form method="post" id="addFileForm">
+            {% csrf_token %}
+            <div style="max-height: 500px; overflow-y: auto;">
+                <table class="data-table" id="fileTable">
+                    <thead style="background: var(--bg-surface-hover);">
+                        <tr>
+                            <th style="width: 50px; padding: 12px 16px;"></th>
+                            <th style="padding: 12px 16px;">File Path</th>
+                            <th style="width: 100px; padding: 12px 16px;">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in available_files %}
+                        <tr class="file-row" style="transition: background 0.15s ease;">
+                            <td style="padding: 12px 16px; text-align: center;">
+                                <input type="radio" name="file_path" value="{{ file.path }}" id="file_{{ forloop.counter }}" required style="cursor: pointer; transform: scale(1.1); accent-color: var(--accent);">
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <label for="file_{{ forloop.counter }}" style="cursor: pointer; display: block; width: 100%; margin: 0;">
+                                    <code>{{ file.path }}</code>
+                                </label>
+                            </td>
+                            <td style="padding: 12px 16px;" class="text-dim font-mono">
+                                {% if file.size < 1024 %}
+                                    {{ file.size }} B
+                                {% elif file.size < 1048576 %}
+                                    {% widthratio file.size 1024 1 %} KB
+                                {% else %}
+                                    {% widthratio file.size 1048576 1 %} MB
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="padding: 24px; border-top: 1px solid var(--border); background: var(--bg-surface-active);" class="flex justify-between items-center">
+                <a href="{% url 'analyzer:analysis_report' session.id %}" class="btn btn-outline text-muted">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary" style="padding: 8px 24px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Analyze this file
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <div style="padding: 40px 24px; text-align: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px; opacity: 0.8;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <h4 class="mb-2">No files available</h4>
+            <p class="text-muted mb-6">All files in the repository have already been analyzed or are not eligible.</p>
+            <a href="{% url 'analyzer:analysis_report' session.id %}" class="btn btn-primary">
+                Back to Report
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Info Box -->
+    <div class="card" style="background: var(--bg-surface); border-color: var(--border);">
+        <h4 class="flex items-center gap-2 mb-3 text-primary" style="font-size: 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Selection Guidelines
+        </h4>
+        <ul style="padding-left: 24px; color: var(--primary-muted); font-size: 0.95rem; line-height: 1.8;">
+            <li>Prioritize files containing critical business logic or handling sensitive data.</li>
+            <li>Authentication and authorization modules should be heavily scrutinized.</li>
+            <li>Configuration files might reveal hardcoded secrets or improper access controls.</li>
+            <li>Avoid test suites, generic documentation, or purely decorative frontend assets.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterFiles() {
+    const filter = document.getElementById('fileSearch').value.toLowerCase();
+    const rows = document.getElementsByClassName('file-row');
+    
+    for (let i = 0; i < rows.length; i++) {
+        const pathCell = rows[i].getElementsByTagName('code')[0];
+        if (pathCell) {
+            const textValue = pathCell.textContent || pathCell.innerText;
+            if (textValue.toLowerCase().indexOf(filter) > -1) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+// Allow clicking on row to select radio button
+document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.getElementsByClassName('file-row');
+    for (let row of rows) {
+        row.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

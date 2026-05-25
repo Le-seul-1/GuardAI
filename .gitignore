@@ -1,0 +1,181 @@
+# ============================================
+# CRITICAL: Sensitive Files - NEVER COMMIT
+# ============================================
+# Environment variables with API keys and secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# Database files (contains user data)
+db.sqlite3
+db.sqlite3-journal
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files (may contain sensitive information)
+logs/
+*.log
+guardai.log
+errors.log
+
+# ============================================
+# Internal Documentation (Development Only)
+# ============================================
+# These files contain internal development notes and should not be public
+AGENTS.md
+PLAN_COMPLET_GUARDAI.md
+PROJECT_STATUS_REPORT.md
+GUIDE_PHASES_3_4.md
+GUIDE_PHASES_5_6_7.md
+GUIDE_PHASE_9_ERROR_HANDLING.md
+GUIDE_PHASE_10_TESTING_DOCS.md
+GITHUB_API_TESTING_GUIDE.md
+PHASE_9_IMPLEMENTATION_SUMMARY.md
+PHASE_9_TESTING_GUIDE.md
+DATABASE_ARCHITECTURE.md
+
+# Bob AI rules (internal)
+.bob/
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================
+# Virtual Environment
+# ============================================
+venv/
+env/
+ENV/
+.venv
+.virtualenv
+env.bak/
+venv.bak/
+
+# ============================================
+# Django
+# ============================================
+local_settings.py
+/media
+/staticfiles
+/static_root
+*.pot
+
+# Django migrations (optional - uncomment if you want to ignore)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# ============================================
+# IDE & Editors
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# Testing & Coverage
+# ============================================
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+test-results/
+
+# ============================================
+# Documentation
+# ============================================
+docs/_build/
+site/
+
+# ============================================
+# Backup & Temporary Files
+# ============================================
+*.bak
+*.tmp
+*.temp
+*~
+.cache/
+
+# ============================================
+# Security & Credentials
+# ============================================
+# SSH keys
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+id_rsa*
+id_dsa*
+
+# API tokens and secrets
+secrets.json
+credentials.json
+token.json
+.secrets/
+
+# ============================================
+# Project Specific
+# ============================================
+# Test files with real tokens (if any)
+test_*.py.local
+*_local.py
+
+# User uploaded files (if implemented)
+/uploads/
+/user_files/
+
+# Compiled translations
+*.mo
+
+# Made with Bob

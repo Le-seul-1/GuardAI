@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Introuvable - GuardAI{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 80px;">
+    <div class="card" style="text-align: center; padding: 60px 40px;">
+        <!-- Large 404 Number with Gradient -->
+        <div style="font-size: 120px; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            404
+        </div>
+        
+        <h1 style="margin-bottom: 16px; font-size: 2rem;">Page Introuvable</h1>
+        
+        <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto;">
+            La page que vous recherchez n'existe pas ou a été déplacée.
+        </p>
+        
+        <!-- Icon -->
+        <div style="margin-bottom: 40px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+        </div>
+        
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <a href="javascript:history.back()" class="btn btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Retour
+            </a>
+            <a href="{% url 'analyzer:home' %}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Accueil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
